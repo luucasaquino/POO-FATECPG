@@ -43,7 +43,7 @@ public class LucasDeAquinoServlet extends HttpServlet {
             out.println("<h1>Atividade Servlets</h1>");
             out.println("<h2>Nome: Lucas de Aquino Assunção</h2>");
             out.println("<h2>RA: 1290482012020</h2>");
-            out.println("<h2><a href=''>Perfil do Git</a></h2>"); 
+            out.println("<h2><a href='https://github.com/luucasaquino/POO-FATECPG'>Perfil do Git</a></h2>"); 
             out.println("</body>");
             out.println("</html>");
         }
