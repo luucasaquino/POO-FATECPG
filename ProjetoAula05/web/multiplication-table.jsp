@@ -12,7 +12,7 @@
     try{
          n = Integer.parseInt(request.getParameter("n"));
     }catch(Exception e){
-        errorMessage =  "Erro ao ler parâmetro n1: "+request.getParameter("n1");
+        errorMessage =  "Erro ao ler parâmetro n: "+request.getParameter("n");
     }
 %>
 <html>
