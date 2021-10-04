@@ -1,0 +1,40 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<%
+    // Processo de login/logout
+    int countSession = 0;
+    if(request.getParameter("login") !=null){
+        session.setAttribute("name", request.getParameter("name"));
+        response.sendRedirect(request.getRequestURI());
+    }else if(request.getParameter("logout")!=null){
+        session.removeAttribute("name");
+        session.removeAttribute("megasena");
+        response.sendRedirect(request.getRequestURI());
+    }
+    // Contagem de pessoas logadas
+    if(application.getAttribute("count") == null){
+        application.setAttribute("count", 0);
+    }
+    if(request.getParameter("login") != null){
+        countSession =(int) application.getAttribute("count");
+        application.setAttribute("count", ++countSession);
+    }
+    if(request.getParameter("logout") != null){
+        countSession =(int) application.getAttribute("count");
+        application.setAttribute("count", --countSession);
+    }
+%>
+<form method="post">
+<h1>Lucas de Aquino Assunção</h1>
+<a href="index.jsp">INÍCIO | </a>
+<a href="lucas-aquino.jsp">LUCAS AQUINO |</a>
+<a href="lucas-aquino-dica-megasena.jsp">DICA MEGASENA |</a>
+<% if(session.getAttribute("name")== null){%>
+Login <input type="text" name="name">
+<input type="submit" name="login" value="LOGIN">
+<%}else{%>
+Bem-vindo(a), <%= session.getAttribute("name")%>
+<input type="submit" name="logout" value="LOGOUT">
+<%}%>
+</form>
+<hr>
