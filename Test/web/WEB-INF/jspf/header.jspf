@@ -1,40 +1,62 @@
 <%-- any content can be specified here e.g.: --%>
+<%@page import="java.util.ArrayList"%>
 <%@ page pageEncoding="UTF-8" %>
 <%
     // Processo de login/logout
     int countSession = 0;
-    if(request.getParameter("login") !=null){
+    if (request.getParameter("login") != null) {
+        String userName = (String) request.getParameter("name");
+        // Lista de pessoas logadas 
+        if (application.getAttribute("listName") == null) {
+            ArrayList<String> names = new ArrayList<>();
+            names.add(userName);
+            application.setAttribute("listName", names);
+
+        } else {
+            ArrayList<String> names = (ArrayList) application.getAttribute("listName");
+            names.add(userName);
+            application.setAttribute("listName", names);
+
+        }
+        //Atribuindo a sessão
         session.setAttribute("name", request.getParameter("name"));
+
         response.sendRedirect(request.getRequestURI());
-    }else if(request.getParameter("logout")!=null){
+    } else if (request.getParameter("logout") != null) {
+        // remover nome da lista
+        ArrayList<String> removeName = (ArrayList) application.getAttribute("listName");
+        removeName.remove(session.getAttribute("name"));
+        application.setAttribute("listName", removeName);
+
         session.removeAttribute("name");
         session.removeAttribute("megasena");
+
         response.sendRedirect(request.getRequestURI());
     }
     // Contagem de pessoas logadas
-    if(application.getAttribute("count") == null){
+    if (application.getAttribute("count") == null) {
         application.setAttribute("count", 0);
     }
-    if(request.getParameter("login") != null){
-        countSession =(int) application.getAttribute("count");
+    if (request.getParameter("login") != null) {
+        countSession = (int) application.getAttribute("count");
         application.setAttribute("count", ++countSession);
     }
-    if(request.getParameter("logout") != null){
-        countSession =(int) application.getAttribute("count");
+    if (request.getParameter("logout") != null) {
+        countSession = (int) application.getAttribute("count");
         application.setAttribute("count", --countSession);
     }
 %>
 <form method="post">
-<h1>Lucas de Aquino Assunção</h1>
-<a href="index.jsp">INÍCIO | </a>
-<a href="lucas-aquino.jsp">LUCAS AQUINO |</a>
-<a href="lucas-aquino-dica-megasena.jsp">DICA MEGASENA |</a>
-<% if(session.getAttribute("name")== null){%>
-Login <input type="text" name="name">
-<input type="submit" name="login" value="LOGIN">
-<%}else{%>
-Bem-vindo(a), <%= session.getAttribute("name")%>
-<input type="submit" name="logout" value="LOGOUT">
-<%}%>
+    <h1>Lucas de Aquino Assunção</h1>
+    <a href="index.jsp">INÍCIO | </a>
+    <a href="lucas-aquino.jsp">LUCAS AQUINO |</a>
+    <a href="lucas-aquino-dica-megasena.jsp">DICA MEGASENA |</a>
+    <% if (session.getAttribute("name") == null) {%>
+    Login <input type="text" name="name">
+    <input type="submit" name="login" value="LOGIN">
+    <%} else {%>
+    Bem-vindo(a), <%= session.getAttribute("name")%>
+    <input type="submit" name="logout" value="LOGOUT">
+    <%}%>
 </form>
 <hr>
