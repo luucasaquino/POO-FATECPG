@@ -4,6 +4,7 @@
     Author     : root
 --%>
 
+<%@page import="java.util.Calendar"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="db.Tasks"%>
 <%@page import="web.DbListener"%>
@@ -12,6 +13,8 @@
 <%
     Exception requestException = null;
     ArrayList<String> taskList = new ArrayList<>();
+    String dataDiaMes = "";
+    String dataHorario = "";
     try {
         if (request.getParameter("add") != null) {
             String taskName = request.getParameter("taskName");
@@ -19,15 +22,26 @@
 
             response.sendRedirect(request.getRequestURI());
         }
-         if (request.getParameter("remove") != null) {
+        if (request.getParameter("remove") != null) {
             String taskName = request.getParameter("taskName");
             Tasks.removeTask(taskName);
 
             response.sendRedirect(request.getRequestURI());
         }
-         
+
         taskList = Tasks.getTasks();
-    } catch(Exception ex){
+
+        //Data
+        Calendar data = Calendar.getInstance();
+        int hora = data.get(Calendar.HOUR_OF_DAY);
+        int min = data.get(Calendar.MINUTE);
+        int seg = data.get(Calendar.SECOND);
+        int dia = data.get(Calendar.DAY_OF_MONTH);
+        int mes = data.get(Calendar.MONTH);
+        dataDiaMes = dia+"/"+mes;
+        dataHorario = hora+":"+min+":"+seg;
+        
+    } catch (Exception ex) {
         requestException = ex;
     }
 
@@ -40,6 +54,7 @@
     <body>
         <h1>JDBC</h1>
         <h2>Lucas de Aquino</h2>
+        <h3>Data: <%= dataDiaMes %> - Hora: <%= dataHorario %></h3>
         <hr>
         <h2>To-do List</h2>
         <%if (DbListener.exception != null) {%>
@@ -65,7 +80,7 @@
                 <td><%= taskName%></td>
                 <td>
                     <form>
-                        <input type="hidden" name="taskName" value="<%= taskName %>">
+                        <input type="hidden" name="taskName" value="<%= taskName%>">
                         <input type="submit" name="remove" value="-">
                     </form>
                 </td>
